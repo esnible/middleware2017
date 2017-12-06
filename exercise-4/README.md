@@ -25,6 +25,8 @@ Install Istio on the Kubernetes cluster.
 kubectl apply -f install/kubernetes/istio.yaml
 ```
 
+TODO Add the istio.yaml that fixes the ingress-absent-from-traces to image.  Name it istio-fix.yaml
+
 ### Install Add-ons for Grafana, Prometheus, and Zipkin
 
 ```sh

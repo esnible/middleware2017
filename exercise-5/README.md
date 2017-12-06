@@ -53,6 +53,8 @@ kubectl get services
 kubectl get pods
 ```
 
+TODO Add `describe pod` here to show init and sidecar.
+
 ### Trying out the Bookinfo application with Istio installed but no special behavior.
 
 External load balancer is not available for kubernetes clusters in the IBM Cloud free tier. You can use the public IP of the worker node, along with the NodePort, to access the ingress. The public IP of the worker node can be obtained from the output of the following command:
@@ -63,4 +65,4 @@ export GATEWAY_URL=<public IP of the worker node>:$(kubectl get svc istio-ingres
 echo Now visit $GATEWAY_URL:/productpage
 ```
 
-#### [Continue to Exercise 6 - Istio Ingress controller](../exercise-6/README.md)
+#### [Continue to Exercise 6 - Telemetry](../exercise-6/README.md)

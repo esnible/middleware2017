@@ -14,10 +14,10 @@
 
 ## Using Istio Service Mesh
 
-- [Exercise 5 - Deploying a microservice application with Istio Proxies](exercise-6/README.md)
-- [Exercise 6 - Telemetry](exercise-8/README.md)
-- [Exercise 7 - Request routing](exercise-9/README.md)
-- [Exercise 8 - Fault injection](exercise-10/README.md)
+- [Exercise 5 - Deploying a microservice application with Istio Proxies](exercise-5/README.md)
+- [Exercise 6 - Telemetry](exercise-6/README.md)
+- [Exercise 7 - Request routing](exercise-7/README.md)
+- [Exercise 8 - Fault injection](exercise-8/README.md)
 
 ## Credits
 These workshop exercises were inspired by https://github.com/szihai/istio-workshop
