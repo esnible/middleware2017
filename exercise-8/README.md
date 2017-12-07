@@ -50,11 +50,10 @@ spec:
 
 ## A simple control panel for fault injection
 
-TODO push isankey2 image to public Docker repo and create isankey.yaml to describe it
+Start the fault injection tool.
 
 ```
-kubectl apply -f isankey.yaml
-echo kubectl port-forward --namespace isankey $(kubectl get pods --namespace istio-system --selector run=isankey --output jsonpath={.items[0].metadata.name}) 8088:8088 '&'
+./scripts/run.sh
 ```
 
 Open two browser windows.  Point one to http://localhost:8088/ and the other to http://localhost:8088/sankey.html
