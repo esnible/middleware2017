@@ -1,66 +1,66 @@
-# Exercise 5 - Deploying a microservice application with Istio Proxies
+# Exercise 6 - Telemetry
 
-We deployed Bookinfo without Istio before.  Now we will deploy it with Istio.
+Before we can look at the application's behavior let's generate load.
 
-### The sidecar concept
+We exported _GATEWAY_URL_ in [Continue to Exercise 5 - Deploying a microservice application with Istio Proxies](../exercise-5/README.md).
 
-A Kubernetes pod is a group of containers that share networking and lifecycle.
-
-A _sidecar_ is a small container that typically provides a behavior aspect for the container.  The term
-comes from the traditional "sidecar", a one-wheeled device attached to a motorcycle.
-
-A special container type in a pod is _Init Container_.  This is a container that is only active during initialization.
-
-Istio is mostly transparent to your application pods because it uses two mechanisms to inject networking
-behavior aspects into your pods.  Under Istio, the application containers in the pod do not directly
-communicate on the network.  An Init Container sets up IPTables rules to ensure inter-pod traffic goes through
-the Istio Proxy sidecar.
-
-### Injecting sidecars into your application
-
-Istio supports automatically injecting sidecars.  You'll need this if you are using a deployment tool such as
-Helm and don't have control of your deployment descriptors.  For purposes of the tutorial we will explain how
-to inject manually.
-
-Kubernetes typically uses a _Deployment File_ to specify deployments, pods, and services.  These files
-are written in YAML.  Istio's sample bookinfo includes a file.  Let's review it first.
-
-```
-cd /tmp/istio-0.2.12
-vi samples/bookinfo/kube/bookinfo.yaml
+```sh
+while sleep 2; do curl -o /dev/null -s -w "%{http_code}\n" http://${GATEWAY_URL}/productpage; done
 ```
 
-"Injecting Istio" into your application pods just means adding the appropriate Init Container and Istio Proxy.
-Istio can read your Kubernetes deployment descriptor and create an equivalent descriptor that includes these
-components.  To generate and view Istio's proposed modification, run
+The loop doesn't terminate.  We can open another window into our dev environment container using
 
 ```
-istioctl kube-inject -f samples/bookinfo/kube/bookinfo.yaml | more
+docker exec -it devenv /bin/bash
 ```
 
-To actually deploy the manually generated deployment, execute
+## View guestbook telemetry data
 
-```
-kubectl apply -f <(istioctl kube-inject -f samples/bookinfo/kube/bookinfo.yaml)
-```
+### Grafana
 
-Of course, if you were using automatic injection, you wouldn't need to explicitly invoke _istioctl_.
-
-Confirm that services and pods are running:
-
-```
-kubectl get services
-kubectl get pods
+Establish port forwarding from local port 3000 to the Grafana instance:
+```sh
+kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana \
+  -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
 ```
 
-### Trying out the Bookinfo application with Istio installed but no special behavior.
+Browse to http://localhost:3000 and navigate to the Istio Dashboard.
 
-External load balancer is not available for kubernetes clusters in the IBM Cloud free tier. You can use the public IP of the worker node, along with the NodePort, to access the ingress. The public IP of the worker node can be obtained from the output of the following command:
-
+### Zipkin
+Establish port forwarding from local port 9411 to the Zipkin instance:
+```sh
+kubectl port-forward -n istio-system \
+  $(kubectl get pod -n istio-system -l app=zipkin -o jsonpath='{.items[0].metadata.name}') \
+  9411:9411 &
 ```
-bx cs workers <cluster-name or id>
-export GATEWAY_URL=<public IP of the worker node>:$(kubectl get svc istio-ingress -n istio-system -o jsonpath='{.spec.ports[0].nodePort}')
-echo Now visit $GATEWAY_URL:/productpage
+
+Browse to http://localhost:9411.
+
+### Prometheus
+Establish port forwarding from local port 9090 to the Prometheus instance:
+```sh
+kubectl -n istio-system port-forward \
+  $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') \
+  9090:9090 &
 ```
 
-#### [Continue to Exercise 6 - Istio Ingress controller](../exercise-6/README.md)
+Browse to http://localhost:9090/graph, and in the “Expression” input box, enter: `request_count`. Click **Execute**.
+
+
+### Service Graph
+Establish port forwarding from local port 8088 to the Service Graph instance:
+```sh
+kubectl -n istio-system port-forward \
+  $(kubectl -n istio-system get pod -l app=servicegraph -o jsonpath='{.items[0].metadata.name}') \
+  8088:8088
+```
+
+Browse to http://localhost:8088/dotviz.
+
+#### Mixer Log Stream
+
+```sh
+kubectl -n istio-system logs $(kubectl -n istio-system get pods -l istio=mixer -o jsonpath='{.items[0].metadata.name}') mixer | grep \"instance\":\"newlog.logentry.istio-system\"
+```
+
+#### [Continue to Exercise 7 - Request routing](../exercise-7/README.md)

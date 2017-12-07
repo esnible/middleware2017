@@ -14,9 +14,15 @@ Your IBM Cloud paid account and your Kubernetes cluster have been pre-provisione
 From a system with Docker installed,
 
 ```
-docker pull snible/middleware17/istioenv # TODO push my image to the Docker hub
+git clone git@github.ibm.com:snible/istio-clienv.git
+cd istio-clienv
+./scripts/build.sh
 docker run -it --name devenv -p 8001:8001 -p 8080:8080 middleware17/istioenv
 ```
+
+The build should take about a minute and a half.
+
+<!-- docker pull snible/middleware17/istioenv # first push my image to the Docker hub -->
 
 This image includes the CLI _bx_, for accessing IBM Cloud, _kubectl_, for accessing Kubernetes,
 and _istioctl_ for accessing Istio.  It also includes the Istio 0.2.12 download.

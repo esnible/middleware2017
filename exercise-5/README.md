@@ -53,7 +53,38 @@ kubectl get services
 kubectl get pods
 ```
 
-TODO Add `describe pod` here to show init and sidecar.
+When we invoke `kubectl describe pod` we can see information about the containers that Istio uses to
+implement the service mesh.
+
+```
+kubectl describe pod productpage-v1-...
+...
+Init Containers:
+  istio-init:
+    Image:         docker.io/istio/proxy_init:0.2.12
+...
+Containers:
+  productpage:
+...
+    Image:          istio/examples-bookinfo-productpage-v1:0.2.3
+...
+  istio-proxy:
+    Container ID:  docker://035b1d008887270a42f682ff454df941a52913b072a21e09c87411cdbc3bc434
+    Image:         docker.io/istio/proxy_debug:0.2.12
+    Image ID:      docker-pullable://istio/proxy_debug@sha256:c87f24ae58b98aad9ad8830e38677ce6a2b29bc341cdf8154f0f48139715d405
+    Port:          <none>
+    Args:
+      proxy
+      sidecar
+      -v
+      2
+...
+```
+
+We can see similar details in the Kubernetes web UI
+
+![Pod Details UI for productpage](pod-details-withsidecar.png)
+![Pod Details UI for productpage](pod-details-init.png)
 
 ### Trying out the Bookinfo application with Istio installed but no special behavior.
 

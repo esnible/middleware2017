@@ -6,11 +6,28 @@ We performed `kubectl proxy --address='0.0.0.0'` from the Docker instance we lau
 
 ### Inspecting the pods
 
-TODO
+Select Workloads->Pods to see a list of the pods running in the _default_ namespace.
+
+![Web UI Pods list](pods.png)
+
+Clicking on an individual Pod brings up the details of that pod including the containers that run within it.
+
+![Web UI Pod details](pod-details.png)
 
 ### Inspecting the services
 
-TODO
+Although pods have networking a _service_ is used to give them a DNS name so that other pods can find them,
+and to optionally expose them to the outside world.  Select Workloads->Services to see a list of the services
+offered for the _default_ namespace.
+
+![Web UI Services list](services.png)
+
+Clicking on an individual Pod brings up the details of that pod including the containers that run within it.
+
+![Web UI Service details](service-details.png)
+
+Kubernetes creates a load balancer for all of the pods in the service.  The service details includes a list
+of the pods that will receive traffic.
 
 ### Accessing Bookinfo
 
@@ -39,8 +56,11 @@ kubectl port-forward productpage-v1-150936620-xv1j3 8080:9080
 curl localhost:8080
 ```
 
-TODO unfortunately the browser can't see productpage because the port-forward binds to 127.0.0.1, not 0.0.0.0.
+Unfortunately the browser can't see productpage because the port-forward binds to 127.0.0.1, not 0.0.0.0.
 
 -->
+
+![Bookinfo Web UI](bookinfo.png)
+
 
 #### [Continue to Exercise 4 - Installing Istio](../exercise-4/README.md)
