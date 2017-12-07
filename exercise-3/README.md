@@ -37,7 +37,7 @@ yet ready to show the use of an Ingress.
 For now we will use a temporary random IP and port to view the running Bookinfo sample.
 
 ```
-kubectl expose service productpage --type=NodePort --target-port=9080 --type=NodePort --name productpage-np
+kubectl expose service productpage --type=NodePort --name productpage-np
 # Record the port number between 9080 and TCP, e.g. 9080:32276/TCP would be port 32276
 kubectl get services | grep productpage-np
 # Record the public IP
