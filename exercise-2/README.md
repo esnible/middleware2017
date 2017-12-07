@@ -26,7 +26,16 @@ reviews-v3-418971697-zmcfp       1/1       Running   0          12s
 Kubernetes will restart pods that crash.  Even if you explicitly _delete_ pods, it will recreate them
 until the amount requested by the deployment (in this case 1 pod) exists.
 
-Note the name of pod in your results.  Delete it:
+Note the name of pod in your results.
+
+All of the container output to _STDOUT_ and _STDERR_ from the restarted pod will be accessible as Kubernetes logs.
+
+```
+kubectl logs ratings-v1-...
+```
+
+
+Delete your pod:
 
 ```
 kubectl delete pod ratings-v1-...
@@ -35,11 +44,5 @@ kubectl delete pod ratings-v1-...
 Kubernetes will automatically restart this pod for you. Verify that it restarted and reach the _Running_ state
 using `kubectl get pods`.
 
-
-All of the container output to _STDOUT_ and _STDERR_ from the restarted pod will be accessible as Kubernetes logs.
-
-```
-kubectl logs ratings-v1-...
-```
 
 #### [Continue to Exercise 3 - Inspecting a Kubernetes deployment](../exercise-3/README.md)

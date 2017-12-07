@@ -93,6 +93,27 @@ Route rules control how requests are routed within an Istio service mesh. For ex
 You may qualify rules by destination, or by source and headers.  Rules also let us inject fault tolerance
 behavior, such as retries and timeouts.  We can inject faults to test that our logic handles fault conditions.
 
+# Istio Sidecar implementation
+
+Without Istio, outbound traffic is sent to a Kubernetes Service, and the load balancer on that service
+directs traffic to the pod instances that implement the service.
+
+Under Istio, an instance of Envoy running in the sidecar has cached this information.  Envoy gets this
+information from the Istio Pilot.  Pilot acts as an Envoy Discovery Service.  The sidecars poll
+http://istio-pilot:8080/v1/registration/
+
+We can't contact that address directly -- it isn't exposed outside the cluster.  For debugging purposes we
+sometimes need to test how networking behaves inside the cluster.  I use the public Docker image
+_appropriate/curl_ for that.
+
+Contact the Envoy discovery service and ask for a description of the mesh:
+
+```
+kubectl run --namespace istio-system -i --rm --restart=Never dummy --image=appropriate/curl istio-pilot:8080/v1/registration/
+```
+
+The output of this command will be a JSON description of the system.
+
 ## Cleanup
 
 Remove the application routing rules.

@@ -17,7 +17,7 @@ Clicking on an individual Pod brings up the details of that pod including the co
 ### Inspecting the services
 
 Although pods have networking a _service_ is used to give them a DNS name so that other pods can find them,
-and to optionally expose them to the outside world.  Select Workloads->Services to see a list of the services
+and to optionally expose them to the outside world.  Select Discovery And Load Balancing->Services to see a list of the services
 offered for the _default_ namespace.
 
 ![Web UI Services list](services.png)
