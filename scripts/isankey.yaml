@@ -1,0 +1,29 @@
+# Use kubectl create -f to deploy the server container onto Kubernetes
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: isankey2
+  name: isankey2
+  namespace: istio-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: isankey2
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: isankey2
+    spec:
+      containers:
+      - env:
+        image: /esnible/isankey2
+        imagePullPolicy: Always
+        name: isankey2
+        resources: {}
+status: {}

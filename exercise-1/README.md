@@ -17,7 +17,7 @@ From a system with Docker installed,
 git clone git@github.ibm.com:snible/istio-clienv.git
 cd istio-clienv
 ./scripts/build.sh
-docker run -it --name devenv -p 8001:8001 -p 8080:8080 middleware17/istioenv
+docker run -it --name devenv -p 8001:8001 -p 8080:8080 -p 8088:8088 middleware17/istioenv
 ```
 
 The build should take about a minute and a half.
