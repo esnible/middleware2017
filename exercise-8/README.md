@@ -59,7 +59,13 @@ in the presence of HTTP faults.
 
 Authorize and start the fault injection tool.
 
+<!--
+kubectl create clusterrole isankey-istio-system --verb=get,update,list,create,delete --resource=routerules
+kubectl create clusterrolebinding isankey-istio-system 
+-->
+
 ```
+cd /tmp
 ./scripts/authorize.sh
 kubectl run --namespace istio-system isankey2 --image-pull-policy=Always --image esnible/isankey2
 kubectl expose deployment --namespace istio-system isankey2 --port 8088 --type=NodePort --name sankey-np
