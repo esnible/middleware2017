@@ -2,10 +2,11 @@
 
 ### Clean up
  
-Start with a clean slate by deleting all deployed services from the cluster.
+Start with a clean slate by deleting all bookinfo from the cluster.
 
 ```sh
-kubectl delete all --all
+cd /tmp/istio-0.2.12/samples/bookinfo/kube/
+kubectl apply -f bookinfo.yaml
 ```
 
 ### Install Istio on the Kubernetes cluster
