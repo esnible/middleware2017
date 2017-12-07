@@ -115,6 +115,6 @@ echo Prometheus is at $GATEWAY_IP:$PROMETHEUS_PORT
 
 #### Using Prometheus
 
-Browse to http://localhost:9090/graph, and in the “Expression” input box, enter: `request_count`. Click **Execute**.
+Browse to `http://<gateway>:<port>`, and in the “Expression” input box, enter: `request_count`. Click **Execute**.
 
 #### [Continue to Exercise 7 - Request routing](../exercise-7/README.md)

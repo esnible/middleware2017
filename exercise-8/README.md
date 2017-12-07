@@ -48,19 +48,30 @@ spec:
        httpStatus: 400
 ```
 
+We could inject these faults by placing the YAML description in a file and using
+`istioctl create routerule -f ...` to script the fault inject.  We use this technique to
+script tests to ensure that our application runs when its dependent services are down or slow.
+
+For this tutorial we will experiment interactively with fault injection and monitoring system behavior
+in the presence of HTTP faults.
+
 ## A simple control panel for fault injection
 
 Start the fault injection tool.
 
 ```
-./scripts/run.sh
+kubectl run --namespace istio-system isankey2 --image-pull-policy=Always --image esnible/isankey2
+kubectl expose deployment --namespace istio-system isankey2 --port 8088 --type=NodePort --name sankey-np
+kubectl get services --namespace istio-system | grep sankey-np
+export SANKEY_PORT=$(kubectl --namespace istio-system get service sankey-np  -o jsonpath='{.spec.ports[0].nodePort}')
+echo Fault Inection Tool is at $GATEWAY_IP:$SANKEY_PORT
 ```
 
-Open two browser windows.  Point one to http://localhost:8088/ and the other to http://localhost:8088/sankey.html
+Open two browser windows.  Point one to http://<gateway>:<port>/ and the other to http://<gateway>:<port>/sankey.html
 
 You should see the usage graph on the second window.  Use the first window to start injecting errors and watch the second graph animate to show how the flow is changing.
 
-Deliver some load to the application.
+If the load driver has stopped restart it to deliver some load to the application.
 
 ```sh
 while sleep 2; do curl -o /dev/null -s -w "%{http_code}\n" http://${GATEWAY_URL}/productpage; done
