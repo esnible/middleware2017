@@ -1,0 +1,23 @@
+# Permissions for the sidecar proxy.
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: isankey-istio-system
+rules:
+- apiGroups: ["config.istio.io"]
+  resources: ["routerules"]
+  verbs: ["get", "update", "list", "create", "delete"] # Not using "watch" or "patch"
+---
+# Grant permissions to the default service account.
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: isankey-istio-system
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: istio-system
+roleRef:
+  kind: ClusterRole
+  name: isankey-istio-system
+  apiGroup: rbac.authorization.k8s.io

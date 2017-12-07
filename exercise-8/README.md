@@ -57,9 +57,10 @@ in the presence of HTTP faults.
 
 ## A simple control panel for fault injection
 
-Start the fault injection tool.
+Authorize and start the fault injection tool.
 
 ```
+./scripts/authorize.sh
 kubectl run --namespace istio-system isankey2 --image-pull-policy=Always --image esnible/isankey2
 kubectl expose deployment --namespace istio-system isankey2 --port 8088 --type=NodePort --name sankey-np
 kubectl get services --namespace istio-system | grep sankey-np
@@ -67,7 +68,7 @@ export SANKEY_PORT=$(kubectl --namespace istio-system get service sankey-np  -o 
 echo Fault Inection Tool is at $GATEWAY_IP:$SANKEY_PORT
 ```
 
-Open two browser windows.  Point one to http://<gateway>:<port>/ and the other to http://<gateway>:<port>/sankey.html
+Open two browser windows.  Point one to `http://<gateway>:<port>/` and the other to `http://<gateway>:<port>/sankey.html`
 
 You should see the usage graph on the second window.  Use the first window to start injecting errors and watch the second graph animate to show how the flow is changing.
 
