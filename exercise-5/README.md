@@ -93,7 +93,7 @@ External load balancer is not available for kubernetes clusters in the IBM Cloud
 ```
 bx cs workers <cluster-name or id>
 export GATEWAY_URL=<public IP of the worker node>:$(kubectl get svc istio-ingress -n istio-system -o jsonpath='{.spec.ports[0].nodePort}')
-echo Now visit $GATEWAY_URL:/productpage
+echo Now visit $GATEWAY_URL/productpage
 ```
 
 #### [Continue to Exercise 6 - Telemetry](../exercise-6/README.md)

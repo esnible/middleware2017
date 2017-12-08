@@ -65,9 +65,20 @@ echo Grafana is at $GATEWAY_IP:$GRAFANA_PORT
 
 Browse to `http://<gateway>:<port>/dashboard/db/istio-dashboard`
 
-TODO explain how to use this dashboard
+The control panel provides the global request volume and success rate and 4xx/5xx HTTP responses,
+along with breakdowns by service of these features.  These features come from Istio.  Applications do
+not need to report these metrics.
+
+![Grafana telemetry from Istio](grafana.png)
+
 
 ### Zipkin
+
+Zipkin is a distributed tracing system. Zipkin holds timing data needed to troubleshoot latency problems in microservice architectures.
+Istio can reduce or eliminate the need to instrument applications to report timing data to Zipkin.
+Zipkin’s design is based on the Google Dapper paper.
+
+The Zipkin UI also presents a Dependency diagram showing how many traced requests went through each application.
 
 <!--
 Establish port forwarding from local port 9411 to the Zipkin instance:
@@ -91,7 +102,10 @@ echo Zipkin is at $GATEWAY_IP:$ZIPKIN_PORT
 
 Browse to `http://<gateway>:<port>`
 
-TODO explain how to use Zipkin
+Click the "JSON" button to do a query of the data Zipkin has captured.
+
+![Zipkin traces from Istio](zipkin.png)
+
 
 ### Prometheus
 
@@ -115,6 +129,9 @@ echo Prometheus is at $GATEWAY_IP:$PROMETHEUS_PORT
 
 #### Using Prometheus
 
-Browse to `http://<gateway>:<port>`, and in the “Expression” input box, enter: `request_count`. Click **Execute**.
+To see Prometheus in action, browse to `http://<gateway>:<port>`, and in the “Expression” input box, enter: `request_count`. Click **Execute**.
+
+![Metrics from Prometheus](prometheus.png)
+
 
 #### [Continue to Exercise 7 - Request routing](../exercise-7/README.md)

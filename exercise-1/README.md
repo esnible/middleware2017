@@ -39,6 +39,7 @@ that has been prepared for this tutorial you must log in to IBM Cloud.
 
 ```
 bx login -a https://api.ng.bluemix.net # -u $BM_USER -o $BM_USER -p $BM_PASSWORD -s $BM_SPACE -c $BM_ACCOUNT_ID
+bx cs region-set us-east
 bx cs init # Redo after each login if you change accounts
 bx cs clusters
 bx cs cluster-config middleware17 # Use your own cluster name
