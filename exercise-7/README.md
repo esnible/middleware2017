@@ -18,6 +18,7 @@ To re-establish settings to talk to the IBM Cloud Kubernetes cluster,
 
 ```
 bx cs cluster-config guestbook # Use your own cluster name if using your own account
+eval $(bx cs cluster-config $(bx cs clusters | tail -n 1 | awk '{print $1}') | grep export)
 ```
 
 ## View guestbook telemetry data

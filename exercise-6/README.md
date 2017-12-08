@@ -82,9 +82,7 @@ spec:
 
 The destination is the name of the service to which the traffic is being routed. The route labels identify the specific service instances that will recieve traffic. For example, in a Kubernetes deployment of Istio, the route label “version: v1” indicates that only pods containing the label “version: v1” will receive traffic.
 
-Rules can be configured using the _istioctl_ CLI, or in a Kubernetes deployment using the _kubectl_ command instead.
-
-There are three kinds of traffic management rules in Istio: Route Rules, Destination Policies (these are not the same as Istio Mixer policies), and Egress Rules. All three kinds of rules control how requests are routed to a destination service.
+Rules can be configured using the _istioctl_ CLI.
 
 # Route Rules
 
@@ -100,7 +98,7 @@ directs traffic to the pod instances that implement the service.
 
 Under Istio, an instance of Envoy running in the sidecar has cached this information.  Envoy gets this
 information from the Istio Pilot.  Pilot acts as an Envoy Discovery Service.  The sidecars poll
-http://istio-pilot:8080/v1/registration/
+`http://istio-pilot:8080/v1/registration/`.
 
 We can't contact that address directly -- it isn't exposed outside the cluster.  For debugging purposes we
 sometimes need to test how networking behaves inside the cluster.  I use the public Docker image
