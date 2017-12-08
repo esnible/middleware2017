@@ -48,7 +48,7 @@ Record the public IP
 ```
 export MYCLUSTER=guestbook
 bx cs workers $MYCLUSTER
-export GATEWAY_IP=$(bx cs workers $MYCLUSTER | grep Ready | awk '{ print $2 }')
+export GATEWAY_IP=$(bx cs workers $MYCLUSTER | grep Ready | head -n 1 | awk '{ print $2 }')
 echo GATEWAY_IP is $GATEWAY_IP
 ```
 

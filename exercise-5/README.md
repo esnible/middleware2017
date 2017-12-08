@@ -94,7 +94,7 @@ External load balancer is not available for kubernetes clusters in the IBM Cloud
 bx cs workers guestbook # or use your own cluster name
 export MYCLUSTER=guestbook
 bx cs workers $MYCLUSTER
-export GATEWAY_IP=$(bx cs workers $MYCLUSTER | grep Ready | awk '{ print $2 }')
+export GATEWAY_IP=$(bx cs workers $MYCLUSTER | grep Ready | head -n 1 | awk '{ print $2 }')
 export GATEWAY_URL=$GATEWAY_IP:$(kubectl get svc istio-ingress -n istio-system -o jsonpath='{.spec.ports[0].nodePort}')
 echo Now visit $GATEWAY_URL/productpage
 ```
