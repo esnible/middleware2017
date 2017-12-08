@@ -18,7 +18,8 @@
 - [Exercise 6 - Telemetry](exercise-6/README.md)
 - [Exercise 7 - Request routing](exercise-7/README.md)
 - [Exercise 8 - Fault injection](exercise-8/README.md)
+- [Exercise 8 - Traffic Shifting](exercise-9/README.md)
 
 ## Credits
-These workshop exercises were inspired by https://github.com/szihai/istio-workshop
+These workshop exercises were inspired by https://github.com/szihai/istio-workshop and the Istio bookinfo samples.
 

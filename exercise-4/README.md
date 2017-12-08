@@ -17,20 +17,18 @@ If you do not have the client, follow the download instructions at https://githu
 Change the directory to the Istio file location.
 
 ```
-cd /tmp/istio-0.2.12
 ```
 
 Install Istio on the Kubernetes cluster.
 
+```sh
+kubectl apply -f /tmp/istio.yaml # Replacement for install/kubernetes/istio.yaml with modifications
 ```
-kubectl apply -f install/kubernetes/istio.yaml
-```
-
-TODO Add the istio.yaml that fixes the ingress-absent-from-traces to image.  Name it istio-fix.yaml
 
 ### Install Add-ons for Grafana, Prometheus, and Zipkin
 
 ```sh
+cd /tmp/istio-0.2.12
 kubectl apply -f install/kubernetes/addons/zipkin.yaml
 kubectl apply -f install/kubernetes/addons/grafana.yaml
 kubectl apply -f install/kubernetes/addons/prometheus.yaml
