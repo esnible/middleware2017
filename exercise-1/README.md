@@ -65,6 +65,16 @@ At this point _kubectl_ should be functional.  To verify,
 kubectl get pods
 ```
 
+### Environment components
+
+For this tutorial we will be communicating with the cloud in three different ways.  We will use three
+CLIs to do this.  The _bx_ CLI talks to IBM Cloud, the _kubectl_ CLI talks to Kubernetes, and the _istioctl_
+CLI talks to Istio.
+
+Istio runs within Kubernetes, and Kubernetes runs within a cloud.
+
+![Environment block diagram](environment.png)
+
 ### Access the Kubernetes web UI
 
 
@@ -76,8 +86,5 @@ kubectl proxy --address='0.0.0.0' &
 ```
 
 In a browser, go to http://localhost:8001/ui to access the API server UI.
-
-It is also possible to use the IBM Cloud UI at https://console.bluemix.net/dashboard/
-to view details of the Kubernetes nodes but this is beyond the scope of this tutorial.
 
 #### [Continue to Exercise 2 - Deploying a microservice application to Kubernetes](../exercise-2/README.md)

@@ -1,2 +1,5 @@
 # Eclipse files
 .project
+
+# OSX files
+.DS_Store

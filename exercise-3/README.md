@@ -22,7 +22,7 @@ offered for the _default_ namespace.
 
 ![Web UI Services list](services.png)
 
-Clicking on an individual Service brings up the details of that pod including the containers that run within it.
+Clicking on an individual Service brings up the details of that service including the containers that run within it.
 
 ![Web UI Service details](service-details.png)
 
