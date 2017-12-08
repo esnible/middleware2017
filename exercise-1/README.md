@@ -35,10 +35,11 @@ install the tools on yourself.
 ### Access your cluster
 
 To use the Kubernetes
-that has been prepared for this tutorial you must log in to IBM Cloud.
+that has been prepared for this tutorial you must log in to IBM Cloud.  Use the tutorial-provided email address,
+not your own.
 
 ```
-bx login -a https://api.ng.bluemix.net --apikey <KEY>
+bx login -a https://api.ng.bluemix.net -u <EMAIL> --apikey <KEY>
 ```
 
 If asked, choose _us-south - https://api.ng.bluemix.net_ as your endpoint.

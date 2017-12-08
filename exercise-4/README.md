@@ -5,8 +5,9 @@
 Start with a clean slate by deleting all bookinfo from the cluster.
 
 ```sh
+kubectl delete service productpage-np
 cd /tmp/istio-0.2.12/samples/bookinfo/kube/
-kubectl apply -f bookinfo.yaml
+kubectl delete -f bookinfo.yaml
 ```
 
 ### Install Istio on the Kubernetes cluster
@@ -14,12 +15,7 @@ kubectl apply -f bookinfo.yaml
 The tutorial environment already includes the Istio client and the Istio infrastructure deployment files.
 If you do not have the client, follow the download instructions at https://github.com/szihai/istio-workshop/blob/master/exercise-5/README.md
 
-Change the directory to the Istio file location.
-
-```
-```
-
-Install Istio on the Kubernetes cluster.
+### Install Istio on the Kubernetes cluster.
 
 ```sh
 kubectl apply -f /tmp/istio.yaml # Replacement for install/kubernetes/istio.yaml with modifications

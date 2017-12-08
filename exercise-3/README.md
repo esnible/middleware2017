@@ -45,7 +45,7 @@ bx cs workers guestbook # or use your own cluster name
 ```
 
 Point your browser to `<public-IP>:<nodeport>/productpage`.  You should see the Bookinfo UI there.  We will be
-using this UI for further experiments.  *Note: If the fonts aren't rendering, the /productpage path was not used.*
+using this UI for further experiments.  **Note: If the fonts aren't rendering as below, the /productpage path was not used.**
 
 ![Bookinfo Web UI](bookinfo.png)
 
