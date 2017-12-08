@@ -17,7 +17,7 @@ docker exec -it devenv /bin/bash
 To re-establish settings to talk to the IBM Cloud Kubernetes cluster,
 
 ```
-bx cs cluster-config middleware17 # Use your own cluster name
+bx cs cluster-config guestbook # Use your own cluster name if using your own account
 ```
 
 ## View guestbook telemetry data

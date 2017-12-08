@@ -1,6 +1,6 @@
 # Exercise 2 - Deploying a microservice application to Kubernetes
 
-### Deploy the Bookinfo service WITHOUT Istio
+### Deploy the Bookinfo application WITHOUT Istio
 
 From the Docker instance we launched in [Exercise 1 - Accessing a Kubernetes cluster with IBM Cloud Container Service](../exercise-1/README.md):
 

@@ -14,10 +14,10 @@ Your IBM Cloud paid account and your Kubernetes cluster have been pre-provisione
 From a system with Docker installed,
 
 ```
-git clone git@github.ibm.com:snible/istio-clienv.git
+git clone git@github.com:esnible/istio-clienv.git
 cd istio-clienv
 ./scripts/build.sh
-docker run -it --name devenv -p 8001:8001 -p 8080:8080 -p 8088:8088 middleware17/istioenv
+docker run -it --name devenv -p 8001:8001 middleware17/istioenv
 ```
 
 The build should take about a minute and a half.
@@ -38,10 +38,17 @@ To use the Kubernetes
 that has been prepared for this tutorial you must log in to IBM Cloud.
 
 ```
-bx login -a https://api.ng.bluemix.net # -u $BM_USER -o $BM_USER -p $BM_PASSWORD -s $BM_SPACE -c $BM_ACCOUNT_ID
+bx login -a https://api.ng.bluemix.net --apikey <KEY>
+```
+
+If asked, choose _us-south - https://api.ng.bluemix.net_ as your endpoint.
+If you are using your own account, just do "bx login" as your normally would.
+
+```
+# If you are using your own cluster (rather than the demo accounts), you can skip setting the region
 bx cs region-set us-east
 bx cs clusters
-bx cs cluster-config middleware17 # Use your own cluster name
+bx cs cluster-config guestbook # Use your own cluster name if using your own account
 ```
 
 Cut-and-paste the configuration output by the previous step, or automatically apply it by doing

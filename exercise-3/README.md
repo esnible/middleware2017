@@ -41,24 +41,11 @@ kubectl expose service productpage --type=NodePort --name productpage-np
 # Record the port number between 9080 and TCP, e.g. 9080:32276/TCP would be port 32276
 kubectl get services | grep productpage-np
 # Record the public IP
-bx cs workers middleware17
+bx cs workers guestbook # or use your own cluster name
 ```
 
 Point your browser to `<public-IP>:<nodeport>/productpage`.  You should see the Bookinfo UI there.  We will be
-using this UI for further experiments.
-
-<!--
-Any web services on any pod can be exposed locally.  The Docker instance running the tutorial environment has port 8080 exposed.  Let's 
-
-```
-# localhost:8080 will respond as if it was productpage-v1:9080
-kubectl port-forward productpage-v1-150936620-xv1j3 8080:9080
-curl localhost:8080
-```
-
-Unfortunately the browser can't see productpage because the port-forward binds to 127.0.0.1, not 0.0.0.0.
-
--->
+using this UI for further experiments.  *Note: If the fonts aren't rendering, the /productpage path was not used.*
 
 ![Bookinfo Web UI](bookinfo.png)
 
