@@ -1,137 +1,126 @@
-# Exercise 6 - Telemetry
+# Exercise 6 - Request routing
 
-Before we can look at the application's behavior let's generate load.
+These steps are based on the Istio documentation at https://istio.io/docs/tasks/traffic-management/request-routing.html
 
-We exported _GATEWAY_URL_ in [Continue to Exercise 5 - Deploying a microservice application with Istio Proxies](../exercise-5/README.md).
+## Content-based routing
 
-```sh
-while sleep 2; do curl -o /dev/null -s -w "%{http_code}\n" http://${GATEWAY_URL}/productpage; done
-```
+Because the BookInfo sample deploys 3 versions of the reviews microservice, we need to set a default route. Otherwise if you access the application several times, you’ll notice that sometimes the output contains star ratings. This is because without an explicit default version set, Istio will route requests to all available versions of a service in a random fashion.
 
-The loop doesn't terminate.  We can open another window into our dev environment container using
+Set the default version for all microservices to v1.
 
 ```
-docker exec -it devenv /bin/bash
+cd /tmp/istio-0.2.12
+istioctl create -f samples/bookinfo/kube/route-rule-all-v1.yaml
 ```
 
-To re-establish settings to talk to the IBM Cloud Kubernetes cluster,
+You can display the routes that are defined:
 
 ```
-bx cs cluster-config guestbook # Use your own cluster name if using your own account
+istioctl get routerules -o yaml
 ```
 
-## View guestbook telemetry data
-
-<!--
-Establish port forwarding from local port 3000 to the Grafana instance:
-```sh
-kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=grafana \
-  -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
+```
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: details-default
+  namespace: default
+  ...
+spec:
+  destination:
+    name: details
+  precedence: 1
+  route:
+  - labels:
+      version: v1
+---
+...
 ```
 
-Browse to http://localhost:3000 and navigate to the Istio Dashboard.
--->
+Since rule propagation to the proxies is asynchronous, you should wait a few seconds for the rules to propagate to all pods before attempting to access the application.
 
-We must expose Grafana, Zipkin, and Prometheus to the outside world for testing.  This can be done
-using `kubectl port-forward` or by creating a NodePort sevice.  We will create a NodePort, exposing
-these services to the entire Internet.
+Open the BookInfo URL (http://$GATEWAY_URL/productpage) in your browser
+You should see the BookInfo application productpage displayed. Notice that the _productpage_ is displayed with no rating stars since _reviews:v1_ does not access the ratings service.
 
-```
-# Re-expose the Services as NodePorts so they are visible even when using a cluster without static IPs
-kubectl expose service --namespace istio-system grafana --type=NodePort --name grafana-np
-kubectl expose service --namespace istio-system zipkin --type=NodePort --name zipkin-np
-kubectl expose service --namespace istio-system prometheus --type=NodePort --name prometheus-np
-```
+Route a specific user to _reviews:v2_
 
-Record the public IP
+Lets enable the ratings service for test user “jason” by routing productpage traffic to _reviews:v2_ instances.
 
 ```
-export MYCLUSTER=guestbook
-bx cs workers $MYCLUSTER
-export GATEWAY_IP=$(bx cs workers $MYCLUSTER | grep Ready | head -n 1 | awk '{ print $2 }')
-echo GATEWAY_IP is $GATEWAY_IP
+istioctl create -f samples/bookinfo/kube/route-rule-reviews-test-v2.yaml
 ```
 
-### Grafana
+Log in as user “jason” at the _productpage_ web page.
 
-We need the dynamic port number that the NodePort created when it exposed Grafana outside the cluster.
+You should now see ratings (1-5 stars) next to each review. Notice that if you log in as any other user, you will continue to see reviews:v1.
 
-```
-# Record the port number between 9080 and TCP, e.g. 9080:32276/TCP would be port 32276
-kubectl get services --namespace istio-system | grep grafana-np
-export GRAFANA_PORT=$(kubectl --namespace istio-system get service grafana-np  -o jsonpath='{.spec.ports[0].nodePort}')
-echo Grafana is at $GATEWAY_IP:$GRAFANA_PORT
-```
+## Understanding what happened
 
-Browse to `http://<gateway>:<port>/dashboard/db/istio-dashboard`
+In this task, you used Istio to send 100% of the traffic to the v1 version of each of the BookInfo services. You then set a rule to selectively send traffic to version v2 of the reviews service based on a header (i.e., a user cookie) in a request.
 
-The control panel provides the global request volume and success rate and 4xx/5xx HTTP responses,
-along with breakdowns by service of these features.  These features come from Istio.  Applications do
-not need to report these metrics.
+Once the v2 version has been tested to our satisfaction, we could use Istio to send traffic from all users to v2, optionally in a gradual fashion.
 
-![Grafana telemetry from Istio](grafana.png)
+### Rules Configuration
 
+Istio provides a simple Domain-specific language (DSL) to control how API calls and layer-4 traffic flow across various services in the application deployment. The DSL allows the operator to configure service-level properties such as circuit breakers, timeouts, retries, as well as set up common continuous deployment tasks such as canary rollouts, A/B testing, staged rollouts with %-based traffic splits, etc. See [Istio's routing rules reference](https://istio.io/docs/reference/config/traffic-rules/) for detailed information.
 
-### Zipkin
-
-Zipkin is a distributed tracing system. Zipkin holds timing data needed to troubleshoot latency problems in microservice architectures.
-Istio can reduce or eliminate the need to instrument applications to report timing data to Zipkin.
-Zipkin’s design is based on the Google Dapper paper.
-
-The Zipkin UI also presents a Dependency diagram showing how many traced requests went through each application.
-
-<!--
-Establish port forwarding from local port 9411 to the Zipkin instance:
-```sh
-kubectl port-forward -n istio-system \
-  $(kubectl get pod -n istio-system -l app=zipkin -o jsonpath='{.items[0].metadata.name}') \
-  9411:9411 &
-```
-
-Browse to http://localhost:9411.
--->
-
-We need the dynamic port number that the NodePort created when it exposed Zipkin outside the cluster.
+For example, a simple rule to send 100% of incoming traffic for a “reviews” service to version “v1” can be described using the Rules DSL as follows:
 
 ```
-# Record the port number between 9080 and TCP, e.g. 9080:32276/TCP would be port 32276
-kubectl get services --namespace istio-system | grep zipkin-np
-export ZIPKIN_PORT=$(kubectl --namespace istio-system get service zipkin-np  -o jsonpath='{.spec.ports[0].nodePort}')
-echo Zipkin is at $GATEWAY_IP:$ZIPKIN_PORT
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: reviews-default
+spec:
+  destination:
+    name: reviews
+  route:
+  - labels:
+      version: v1
+    weight: 100
 ```
 
-Browse to `http://<gateway>:<port>`
+The destination is the name of the service to which the traffic is being routed. The route labels identify the specific service instances that will recieve traffic. For example, in a Kubernetes deployment of Istio, the route label “version: v1” indicates that only pods containing the label “version: v1” will receive traffic.
 
-Click the "JSON" button to do a query of the data Zipkin has captured.
+Rules can be configured using the _istioctl_ CLI, or in a Kubernetes deployment using the _kubectl_ command instead.
 
-![Zipkin traces from Istio](zipkin.png)
+There are three kinds of traffic management rules in Istio: Route Rules, Destination Policies (these are not the same as Istio Mixer policies), and Egress Rules. All three kinds of rules control how requests are routed to a destination service.
 
+# Route Rules
 
-### Prometheus
+Route rules control how requests are routed within an Istio service mesh. For example, a route rule could route requests to different versions of a service. Requests can be routed based on the source and destination, HTTP header fields, and weights associated with individual service versions.
 
-<!--
-Establish port forwarding from local port 9090 to the Prometheus instance:
-```sh
-kubectl -n istio-system port-forward \
-  $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') \
-  9090:9090 &
+You may qualify rules by destination, or by source and headers.  Rules also let us inject fault tolerance
+behavior, such as retries and timeouts.  We can inject faults to test that our logic handles fault conditions.
+
+# Istio Sidecar implementation
+
+Without Istio, outbound traffic is sent to a Kubernetes Service, and the load balancer on that service
+directs traffic to the pod instances that implement the service.
+
+Under Istio, an instance of Envoy running in the sidecar has cached this information.  Envoy gets this
+information from the Istio Pilot.  Pilot acts as an Envoy Discovery Service.  The sidecars poll
+http://istio-pilot:8080/v1/registration/
+
+We can't contact that address directly -- it isn't exposed outside the cluster.  For debugging purposes we
+sometimes need to test how networking behaves inside the cluster.  I use the public Docker image
+_appropriate/curl_ for that.
+
+Contact the Envoy discovery service and ask for a description of the mesh:
+
 ```
--->
-
-We need the dynamic port number that the NodePort created when it exposed Prometheus outside the cluster.
-
-```
-# Record the port number between 9080 and TCP, e.g. 9080:32276/TCP would be port 32276
-kubectl get services --namespace istio-system | grep prometheus-np
-export PROMETHEUS_PORT=$(kubectl --namespace istio-system get service prometheus-np  -o jsonpath='{.spec.ports[0].nodePort}')
-echo Prometheus is at $GATEWAY_IP:$PROMETHEUS_PORT
+kubectl run --namespace istio-system -i --rm --restart=Never dummy --image=appropriate/curl istio-pilot:8080/v1/registration/
 ```
 
-#### Using Prometheus
+The output of this command will be a JSON description of the system.
 
-To see Prometheus in action, browse to `http://<gateway>:<port>`, and in the “Expression” input box, enter: `request_count`. Click **Execute**.
+## Cleanup
 
-![Metrics from Prometheus](prometheus.png)
+Remove the application routing rules.
 
+```
+istioctl delete -f samples/bookinfo/kube/route-rule-all-v1.yaml
+istioctl delete -f samples/bookinfo/kube/route-rule-reviews-test-v2.yaml
+```
 
-#### [Continue to Exercise 7 - Request routing](../exercise-7/README.md)
+#### [Continue to Exercise 7 - Telemetry](../exercise-7/README.md)

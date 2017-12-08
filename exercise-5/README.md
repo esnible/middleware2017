@@ -99,4 +99,4 @@ export GATEWAY_URL=$GATEWAY_IP:$(kubectl get svc istio-ingress -n istio-system -
 echo Now visit $GATEWAY_URL/productpage
 ```
 
-#### [Continue to Exercise 6 - Telemetry](../exercise-6/README.md)
+#### [Continue to Exercise 6 - Request routing](../exercise-6/README.md)
