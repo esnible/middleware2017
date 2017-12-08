@@ -46,7 +46,7 @@ kubectl expose service --namespace istio-system prometheus --type=NodePort --nam
 Record the public IP
 
 ```
-export MYCLUSTER=middleware17
+export MYCLUSTER=guestbook
 bx cs workers $MYCLUSTER
 export GATEWAY_IP=$(bx cs workers $MYCLUSTER | grep Ready | awk '{ print $2 }')
 echo GATEWAY_IP is $GATEWAY_IP
