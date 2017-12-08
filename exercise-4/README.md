@@ -40,4 +40,10 @@ kubectl get pods --all-namespaces
 kubectl get services --all-namespaces
 ```
 
+You can also view the Istio pods in the web UI being proxied to http://localhost:8001/ui .  Select
+'istio-system' from the drop-down combo box *Namespace*.
+
+![Kubernetes Web UI](kubernetes.png)
+
+
 #### [Continue to Exercise 5 - Deploying a microservice application with Istio Proxies](../exercise-5/README.md)
