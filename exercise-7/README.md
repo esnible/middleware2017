@@ -103,7 +103,7 @@ echo Zipkin is at $GATEWAY_IP:$ZIPKIN_PORT
 
 Browse to `http://<gateway>:<port>`
 
-Click the "JSON" button to do a query of the data Zipkin has captured.
+Click the "Find Traces" button to do a query of the data Zipkin has captured.
 
 ![Zipkin traces from Istio](zipkin.png)
 
@@ -135,4 +135,4 @@ To see Prometheus in action, browse to `http://<gateway>:<port>`, and in the “
 ![Metrics from Prometheus](prometheus.png)
 
 
-#### [Continue to Exercise 8 - Fault Injection](../exercise-7/README.md)
+#### [Continue to Exercise 8 - Fault Injection](../exercise-8/README.md)
