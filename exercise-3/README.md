@@ -41,7 +41,7 @@ kubectl expose service productpage --type=NodePort --name productpage-np
 # Record the port number between 9080 and TCP, e.g. 9080:32276/TCP would be port 32276
 kubectl get services | grep productpage-np
 # Record the public IP
-bx cs workers guestbook # or use your own cluster name
+bx cs workers middleware2017 # or use your own cluster name
 ```
 
 Point your browser to `<public-IP>:<nodeport>/productpage`.  You should see the Bookinfo UI there.  We will be

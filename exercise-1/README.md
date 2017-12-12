@@ -47,10 +47,12 @@ If you are using your own account, just do "bx login" as your normally would.
 
 ```
 # If you are using your own cluster (rather than the demo accounts), you can skip setting the region
-bx cs region-set us-east
 bx cs clusters
-bx cs cluster-config guestbook # Use your own cluster name if using your own account
+bx cs cluster-config middleware2017 # Use your own cluster name if using your own account
 ```
+
+<!-- bx cs region-set us-east -->
+<!-- bx cs region-set us-south -->
 
 Cut-and-paste the configuration output by the previous step, or automatically apply it by doing
 
@@ -62,7 +64,7 @@ eval $(bx cs cluster-config $(bx cs clusters | tail -n 1 | awk '{print $1}') | g
 At this point _kubectl_ should be functional.  To verify,
 
 ```
-kubectl get pods
+kubectl get pods --all-namespaces
 ```
 
 ### Environment components

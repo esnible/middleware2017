@@ -91,8 +91,7 @@ We can see similar details in the Kubernetes web UI
 External load balancer is not available for kubernetes clusters in the IBM Cloud free tier. You can use the public IP of the worker node, along with the NodePort, to access the ingress. The public IP of the worker node can be obtained from the output of the following command:
 
 ```
-bx cs workers guestbook # or use your own cluster name
-export MYCLUSTER=guestbook
+export MYCLUSTER=middleware2017 # or use your own cluster name
 bx cs workers $MYCLUSTER
 export GATEWAY_IP=$(bx cs workers $MYCLUSTER | grep Ready | head -n 1 | awk '{ print $2 }')
 export GATEWAY_URL=$GATEWAY_IP:$(kubectl get svc istio-ingress -n istio-system -o jsonpath='{.spec.ports[0].nodePort}')

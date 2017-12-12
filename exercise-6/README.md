@@ -2,9 +2,21 @@
 
 These steps are based on the Istio documentation at https://istio.io/docs/tasks/traffic-management/request-routing.html
 
+## Bookinfo
+
+![Book Info structure](withistio.svg)
+
+If you access Bookinfo several times, you’ll notice that sometimes the output contains star ratings. This is because without an explicit default version set, Istio will route requests to all available versions of a service in a random fashion.
+
+![Black stars in UI](blackstars.png)
+
+*reload a few times*
+
+![Red stars in UI](blackstars.png)
+
 ## Content-based routing
 
-Because the BookInfo sample deploys 3 versions of the reviews microservice, we need to set a default route. Otherwise if you access the application several times, you’ll notice that sometimes the output contains star ratings. This is because without an explicit default version set, Istio will route requests to all available versions of a service in a random fashion.
+Because the BookInfo sample deploys 3 versions of the reviews microservice, we need to set a default route. 
 
 Set the default version for all microservices to v1.
 

@@ -17,11 +17,11 @@ docker exec -it devenv /bin/bash
 To re-establish settings to talk to the IBM Cloud Kubernetes cluster,
 
 ```
-bx cs cluster-config guestbook # Use your own cluster name if using your own account
+bx cs cluster-config middleware2017 # Use your own cluster name if using your own account
 eval $(bx cs cluster-config $(bx cs clusters | tail -n 1 | awk '{print $1}') | grep export)
 ```
 
-## View guestbook telemetry data
+## View cluster telemetry data
 
 <!--
 Establish port forwarding from local port 3000 to the Grafana instance:
@@ -47,7 +47,7 @@ kubectl expose service --namespace istio-system prometheus --type=NodePort --nam
 Record the public IP
 
 ```
-export MYCLUSTER=guestbook
+export MYCLUSTER=middleware2017
 bx cs workers $MYCLUSTER
 export GATEWAY_IP=$(bx cs workers $MYCLUSTER | grep Ready | head -n 1 | awk '{ print $2 }')
 echo GATEWAY_IP is $GATEWAY_IP
