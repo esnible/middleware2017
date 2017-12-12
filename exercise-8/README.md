@@ -71,7 +71,7 @@ kubectl run --namespace istio-system isankey2 --image-pull-policy=Always --image
 kubectl expose deployment --namespace istio-system isankey2 --port 8088 --type=NodePort --name sankey-np
 kubectl get services --namespace istio-system | grep sankey-np
 export SANKEY_PORT=$(kubectl --namespace istio-system get service sankey-np  -o jsonpath='{.spec.ports[0].nodePort}')
-echo Fault Inection Tool is at $GATEWAY_IP:$SANKEY_PORT
+echo Fault Injection Tool is at $GATEWAY_IP:$SANKEY_PORT
 ```
 
 Open two browser windows.  Point one to `http://<gateway>:<port>/` and the other to `http://<gateway>:<port>/sankey.html`
